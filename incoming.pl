@@ -315,8 +315,8 @@ sub process_image
 	my $filename=$1;
 	# Firstly work out where we're going to put this picture
 	#my $date=`/usr/bin/dcraw -i -v "$sourcepath" | grep Timestamp 2>&1`;
-	my $date=`/usr/bin/exiftool "$sourcepath" | grep Modification 2>&1`;
-	if ($date=~m/Time\s+:\s+(\d+):(\d+):(\d+)\s+(.+)$/){
+	my $date=`/usr/bin/exiftool "$sourcepath" | grep "Date/Time Created" 2>&1`;
+	if ($date=~m/Time Created\s+:\s+(\d+):(\d+):(\d+)\s+(.+)$/){
 		#my $day = $3;
 		#if (length ($day) == 1) {$day = "0" . $day};
 		my $dirname = $1 . "-" .  $2 . "-" . $3;
