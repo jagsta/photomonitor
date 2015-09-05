@@ -314,14 +314,15 @@ sub process_image
 	$sourcepath=~m/^.+\/(.+?)$/;
 	my $filename=$1;
 	# Firstly work out where we're going to put this picture
-	my $date=`/usr/bin/dcraw -i -v "$sourcepath" | grep Timestamp 2>&1`;
-	if ($date=~m/Timestamp:\s+(\w+)\s+(\w+)\s+(\d+)\s+(.+)\s+(\d+)/){
-		my $day = $3;
-		if (length ($day) == 1) {$day = "0" . $day};
-		my $dirname = $5 . "-" .  ${month}{$2} . "-" . $day;
-		$date = $1 . " " . $2 . " " . $3 . " " . $4 . " " . $5;
-		my $archivedir = $archivestub . "/" . $5 . "/";
-		my $jpegdir = $jpegstub . "/" . $5 . "/";
+	#my $date=`/usr/bin/dcraw -i -v "$sourcepath" | grep Timestamp 2>&1`;
+	my $date=`/usr/bin/exiftool "$sourcepath" | grep Modification 2>&1`;
+	if ($date=~m/Time\s+:\s+(\d+):(\d+):(\d+)\s+(.+)$/){
+		#my $day = $3;
+		#if (length ($day) == 1) {$day = "0" . $day};
+		my $dirname = $1 . "-" .  $2 . "-" . $3;
+		$date = $1 . "-" . $2 . "-" . $3 . " " . $4;
+		my $archivedir = $archivestub . "/" . $1 . "/";
+		my $jpegdir = $jpegstub . "/" . $1 . "/";
 		my $result = &check_directory($archivedir,$workerid);
 		if ($result){
 			syslog('info',"$$ PROCESSOR$workerid warning: $result");
